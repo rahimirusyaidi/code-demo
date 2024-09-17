@@ -1,11 +1,16 @@
 package com.demo.assignment.service;
 
+import com.demo.assignment.dao.CustomDrug;
 import com.demo.assignment.model.Drug;
 import com.demo.assignment.model.DrugCatalogueBaseResponse;
 import com.demo.assignment.model.FdaBaseResponse;
 import com.demo.assignment.model.ResultInfo;
+import com.demo.assignment.repository.DrugRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -23,17 +28,25 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class DrugCatalogueServiceImpl implements DrugCatalogueService {
+
+    private final DrugRepository repository;
 
     @Override
     public DrugCatalogueBaseResponse getDrugData(ResultInfo pageable, String manufacturerName) throws Exception {
 
+        // todo: there should be better way to do this
+        if(pageable.getSkip() == null){
+            pageable.setSkip(0);
+        }
+
+        if(pageable.getLimit() == null){
+            pageable.setLimit(10);
+        }
+
         // fetch data from FDA website
         FdaBaseResponse response = this.fetchDrugDataFromFda(pageable, manufacturerName);
-
-        if (response == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Drug not found for manufacturer: " + manufacturerName);
-        }
 
         return DrugCatalogueBaseResponse.builder()
                 .pageable(new ResultInfo(response.getMeta()))
@@ -44,6 +57,7 @@ public class DrugCatalogueServiceImpl implements DrugCatalogueService {
                                 .applicationNumber(data.getOpenfda().getApplicationNumber().stream().findAny().orElse("N/A"))
                                 .genericName(data.getOpenfda().getGenericName())
                                 .manufacturerName(data.getOpenfda().getManufacturingName().stream().filter(manufacture -> manufacture.contains(manufacturerName)).findFirst().orElse("N/A"))
+                                .substanceName(data.getOpenfda().getSubstanceName())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
@@ -74,5 +88,27 @@ public class DrugCatalogueServiceImpl implements DrugCatalogueService {
         } catch (HttpServerErrorException e) {
             throw new Exception("server side exception error :" + e.getMessage());
         }
+    }
+
+    @Override
+    public void addNewDrugCatalogue(Drug drug) throws Exception{
+
+        CustomDrug dataToBeSave = CustomDrug.builder()
+                .manufacturerName(drug.getManufacturerName())
+                .substanceName(drug.getSubstanceName())
+                .build();
+
+        repository.save(dataToBeSave);
+    }
+
+    @Override
+    public Page<CustomDrug> fetchLocalDrugCatalogue(String manufacturerName, Pageable pageable) throws Exception {
+
+        Page<CustomDrug> response = repository.findByManufacturerNameContainingIgnoreCase(manufacturerName, pageable);
+
+        if (response.getTotalElements() == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Drug not found for manufacturer: " + manufacturerName);
+        }
+        return response;
     }
 }

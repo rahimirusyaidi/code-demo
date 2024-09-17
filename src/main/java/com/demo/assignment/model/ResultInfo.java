@@ -19,9 +19,9 @@ public class ResultInfo {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     Integer total;
 
-    public ResultInfo() {
-        this.skip = 0;
-        this.limit = 10;
+    public ResultInfo(Integer skip, Integer limit) {
+        this.skip = skip;
+        this.limit = limit;
     }
 
     public ResultInfo(FdaBaseResponse.Meta meta) {
