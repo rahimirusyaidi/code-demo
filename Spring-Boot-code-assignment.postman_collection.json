@@ -1,0 +1,73 @@
+{
+	"info": {
+		"_postman_id": "13321a5f-02cf-48d4-88fe-5d2e33e9a455",
+		"name": "Spring Boot code assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2852941"
+	},
+	"item": [
+		{
+			"name": "fetch saved drug catalogue ",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/drug?manufacturerName=homemade&page=0&size=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"drug"
+					],
+					"query": [
+						{
+							"key": "manufacturerName",
+							"value": "homemade"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add drug to catalogue ",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"manufacturerName\":\"Homeopathy\",\n    \"substanceName\":[\n        \"Camphor\",\n        \"Ethyl\"\n    ],\n    \"genericName\":[\n        \"Inhaler\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/drug",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"drug"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
