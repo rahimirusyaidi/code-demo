@@ -13,6 +13,18 @@ As a user, you should be able to:
     - Manufacturer name
     - Substance name (if available)
 
+## How to Run?
+1. clone the project
+2. access directory in terminal
+3. install dependencies
+    ```bash
+    mvn clean install
+    ```
+4. run application
+    ```bash
+    mvn spring-boot:run
+    ```
+
 ## API Specifications
 
 ### 1. `GET /api/drug/search`
