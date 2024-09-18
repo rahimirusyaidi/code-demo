@@ -64,7 +64,6 @@ public class DrugCatalogueServiceImpl implements DrugCatalogueService {
     }
 
     private FdaBaseResponse fetchDrugDataFromFda(ResultInfo pageable, String manufacturerName) throws Exception {
-        //TODO: add formatted logging for this rest template
         RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
         RestTemplate restTemplate = restTemplateBuilder.build();
 
@@ -91,7 +90,7 @@ public class DrugCatalogueServiceImpl implements DrugCatalogueService {
     }
 
     @Override
-    public void addNewDrugCatalogue(Drug drug) throws Exception{
+    public void addNewDrugCatalogue(Drug drug) {
 
         CustomDrug dataToBeSave = CustomDrug.builder()
                 .manufacturerName(drug.getManufacturerName())
@@ -102,7 +101,7 @@ public class DrugCatalogueServiceImpl implements DrugCatalogueService {
     }
 
     @Override
-    public Page<CustomDrug> fetchLocalDrugCatalogue(String manufacturerName, Pageable pageable) throws Exception {
+    public Page<CustomDrug> fetchLocalDrugCatalogue(String manufacturerName, Pageable pageable) {
 
         Page<CustomDrug> response = repository.findByManufacturerNameContainingIgnoreCase(manufacturerName, pageable);
 
