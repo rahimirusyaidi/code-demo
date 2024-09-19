@@ -63,7 +63,7 @@ public class DrugCatalogueServiceImpl implements DrugCatalogueService {
                 .build();
     }
 
-    private FdaBaseResponse fetchDrugDataFromFda(ResultInfo pageable, String manufacturerName) throws Exception {
+    public FdaBaseResponse fetchDrugDataFromFda(ResultInfo pageable, String manufacturerName) throws Exception {
         RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
         RestTemplate restTemplate = restTemplateBuilder.build();
 

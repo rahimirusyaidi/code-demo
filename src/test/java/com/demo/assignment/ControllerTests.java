@@ -65,25 +65,26 @@ public class ControllerTests {
         String response = result.getResponse().getContentAsString();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String expectedResponse = "{\n" +
-                "    \"pageable\": {\n" +
-                "        \"skip\": 0,\n" +
-                "        \"limit\": 1,\n" +
-                "        \"total\": 124\n" +
-                "    },\n" +
-                "    \"drug\": [\n" +
-                "        {\n" +
-                "            \"applicationNumber\": \"ANDA084949\",\n" +
-                "            \"manufacturerName\": \"Pfizer Laboratories Div Pfizer Inc\",\n" +
-                "            \"genericName\": [\n" +
-                "                \"ESTERIFIED ESTROGENS\"\n" +
-                "            ],\n" +
-                "            \"substanceName\": [\n" +
-                "                \"ESTROGENS, ESTERIFIED\"\n" +
-                "            ]\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
+        String expectedResponse = """
+                {
+                    "pageable": {
+                        "skip": 0,
+                        "limit": 1,
+                        "total": 124
+                    },
+                    "drug": [
+                        {
+                            "applicationNumber": "ANDA084949",
+                            "manufacturerName": "Pfizer Laboratories Div Pfizer Inc",
+                            "genericName": [
+                                "ESTERIFIED ESTROGENS"
+                            ],
+                            "substanceName": [
+                                "ESTROGENS, ESTERIFIED"
+                            ]
+                        }
+                    ]
+                }""";
 
         // Compare entire response instead of extracting parts
         assertEquals(objectMapper.readTree(expectedResponse), objectMapper.readTree(response));
